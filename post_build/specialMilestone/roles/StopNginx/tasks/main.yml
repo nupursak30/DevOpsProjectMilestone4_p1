@@ -1,0 +1,14 @@
+---
+- name: Stopping nginx service
+  service:
+    name: nginx
+    state: stopped
+  register: nginx_state
+
+- name: Send notification message via Slack
+  slack:
+    token: "{{ lookup('ini', 'token section=slack file=./credentials.ini') }}"
+    msg: "Nginx service is down!!"
+    channel: "#general"
+    username: "Checkbox-bot"
+  when: nginx_state is changed

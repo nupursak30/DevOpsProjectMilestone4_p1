@@ -1,0 +1,3 @@
+---
+- import_tasks: ansible_install.yml
+- import_tasks: post_build.yml

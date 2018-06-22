@@ -1,0 +1,14 @@
+---
+- name: move chaos_cpu file
+  become: yes
+  template:
+    src:  chaos.sh.j2
+    dest: /home/ubuntu/chaos.sh
+    mode: a+x
+
+- name: move chaos file
+  become: yes
+  template:
+    src:  freechaos.sh.j2
+    dest: /home/ubuntu/freechaos.sh
+    mode: a+x

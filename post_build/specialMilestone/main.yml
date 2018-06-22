@@ -1,0 +1,7 @@
+- name: Creating and notifying alerts for checkbox main server
+  hosts: checkbox[0]
+  become: yes
+  gather_facts: no
+  roles:
+     - StopNginx
+     - StartNginx

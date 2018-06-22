@@ -1,0 +1,46 @@
+---
+
+- name: Unzipping the files needed to run iTrust on Jenkins
+  unarchive:
+    src: ./post_build.zip
+    dest: ./
+
+- name: Copy Github credentials template-1
+  copy:
+    src: ./credentials.ini
+    dest: ./post_build/credentials.ini
+
+- name: Copy Github credentials template-2
+  copy:
+    src: ./credentials.ini
+    dest: ./post_build/specialMilestone/credentials.ini
+
+- name: Copy ssh config
+  copy:
+    src: ./config
+    dest: ~/.ssh/config
+    mode: 0644
+  become: yes
+
+- name: Run the Ansible playbook to provision and configure checkbox
+  shell: ansible-playbook -i inventory main.yml
+  args:
+   chdir: ./post_build
+  register: post_build_output
+- debug:
+    var: post_build_output.stdout
+
+- name: Copy inventory file inside the specialMilestone folder
+  copy:
+    src: ./post_build/inventory
+    dest: ./post_build/specialMilestone/inventory
+    remote_src: yes
+  become: yes
+
+- name: Copy key inside the specialMilestone folder
+  copy:
+    src: ./post_build/aws-cb1-key.pem
+    dest: ./post_build/specialMilestone/aws-cb1-key.pem
+    mode: 0600
+    remote_src: yes
+  become: yes
